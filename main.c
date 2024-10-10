@@ -9,39 +9,39 @@ void gerar_subpixel(struct pixel_s *pixel, struct pixel_s matriz[3][3]) {
     int b = pixel->b;
 
     // Definindo o padrão de sub-pixels para o componente vermelho (R)
-    if (r <= 74) {
-        matriz[0][0] = (struct pixel_s){0, 0, 0};  // Tudo preto
+    if (r <= 74) { // Tudo preto
+        matriz[0][0] = (struct pixel_s){0, 0, 0};
         matriz[0][1] = (struct pixel_s){0, 0, 0};
         matriz[0][2] = (struct pixel_s){0, 0, 0};
-    } else if (r <= 134) {
-        matriz[0][0] = (struct pixel_s){0, 0, 0};  // Apenas o sub-pixel do meio é vermelho
+    } else if (r <= 134) { // Apenas o sub-pixel do meio é vermelho
+        matriz[0][0] = (struct pixel_s){0, 0, 0};
         matriz[0][1] = (struct pixel_s){r, 0, 0};
         matriz[0][2] = (struct pixel_s){0, 0, 0};
-    } else if (r <= 179) {
-        matriz[0][0] = (struct pixel_s){r, 0, 0};  // Os sub-pixels laterais são vermelhos
+    } else if (r <= 179) { // Os sub-pixels laterais são vermelhos
+        matriz[0][0] = (struct pixel_s){r, 0, 0};
         matriz[0][1] = (struct pixel_s){0, 0, 0};
         matriz[0][2] = (struct pixel_s){r, 0, 0};
-    } else {
-        matriz[0][0] = (struct pixel_s){r, 0, 0};  // Todos os sub-pixels são vermelhos
+    } else { // Todos os sub-pixels são vermelhos
+        matriz[0][0] = (struct pixel_s){r, 0, 0};
         matriz[0][1] = (struct pixel_s){r, 0, 0};
         matriz[0][2] = (struct pixel_s){r, 0, 0};
     }
 
     // Componente verde
-    if (g <= 74) {
-        matriz[1][0] = (struct pixel_s){0, 0, 0};  // Tudo preto
+    if (g <= 74) { // Tudo preto
+        matriz[1][0] = (struct pixel_s){0, 0, 0};
         matriz[1][1] = (struct pixel_s){0, 0, 0};
         matriz[1][2] = (struct pixel_s){0, 0, 0};
-    } else if (g <= 134) {
-        matriz[1][0] = (struct pixel_s){0, 0, 0};  // Apenas o sub-pixel do meio é verde
+    } else if (g <= 134) { // Apenas o sub-pixel do meio é verde
+        matriz[1][0] = (struct pixel_s){0, 0, 0};  
         matriz[1][1] = (struct pixel_s){0, g, 0};
         matriz[1][2] = (struct pixel_s){0, 0, 0};
-    } else if (g <= 179) {
-        matriz[1][0] = (struct pixel_s){0, g, 0};  // Sub-pixels laterais são verdes
+    } else if (g <= 179) { // Sub-pixels laterais são verdes
+        matriz[1][0] = (struct pixel_s){0, g, 0};  
         matriz[1][1] = (struct pixel_s){0, 0, 0};
         matriz[1][2] = (struct pixel_s){0, g, 0};
-    } else {
-        matriz[1][0] = (struct pixel_s){0, g, 0};  // Todos os sub-pixels são verdes
+    } else { // Todos os sub-pixels são verdes
+        matriz[1][0] = (struct pixel_s){0, g, 0};  
         matriz[1][1] = (struct pixel_s){0, g, 0};
         matriz[1][2] = (struct pixel_s){0, g, 0};
     }
