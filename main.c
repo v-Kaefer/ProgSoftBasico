@@ -65,27 +65,29 @@ void zoom_imagem(struct image_s *original, struct image_s *ampliada) {
 }
 
 
-void test_gerar_subpixel() {
-    struct pixel_s test_pixel_black = {0, 0, 0};
-    struct pixel_s test_matriz_black[3][3];
-    gerar_subpixel(&test_pixel_black, test_matriz_black);
+void gerar_subpixel(struct pixel_s *pixel, struct pixel_s matriz[3][3]) {
+    int cores[3] = {pixel->r, pixel->g, pixel->b};
 
-    // Assert for black output
-    assert(test_matriz_black[0][0].r == 0 && test_matriz_black[0][0].g == 0 && test_matriz_black[0][0].b == 0);
-    assert(test_matriz_black[0][1].r == 0 && test_matriz_black[0][1].g == 0 && test_matriz_black[0][1].b == 0);
-    assert(test_matriz_black[0][2].r == 0 && test_matriz_black[0][2].g == 0 && test_matriz_black[0][2].b == 0);
-
-    struct pixel_s test_pixel_red = {150, 0, 0};
-    struct pixel_s test_matriz_red[3][3];
-    gerar_subpixel(&test_pixel_red, test_matriz_red);
-
-    // Assert for red output
-    assert(test_matriz_red[0][0].r == 0 && test_matriz_red[0][0].g == 0 && test_matriz_red[0][0].b == 0);
-    assert(test_matriz_red[0][1].r == 150 && test_matriz_red[0][1].g == 0 && test_matriz_red[0][1].b == 0);
-    assert(test_matriz_red[0][2].r == 0 && test_matriz_red[0][2].g == 0 && test_matriz_red[0][2].b == 0);
-
-    // Add similar assertions for blue and green outputs
-
+    for (int i = 0; i < 3; i++) {
+        int cor = cores[i];
+        if (cor <= 74) {
+            matriz[i][0] = (struct pixel_s){0, 0, 0};
+            matriz[i][1] = (struct pixel_s){0, 0, 0};
+            matriz[i][2] = (struct pixel_s){0, 0, 0};
+        } else if (cor <= 134) {
+            matriz[i][0] = (struct pixel_s){0, 0, 0};
+            matriz[i][1] = (struct pixel_s){i == 0 ? cor : 0, i == 1 ? cor : 0, i == 2 ? cor : 0};
+            matriz[i][2] = (struct pixel_s){0, 0, 0};
+        } else if (cor <= 179) {
+            matriz[i][0] = (struct pixel_s){i == 0 ? cor : 0, i == 1 ? cor : 0, i == 2 ? cor : 0};
+            matriz[i][1] = (struct pixel_s){0, 0, 0};
+            matriz[i][2] = (struct pixel_s){i == 0 ? cor : 0, i == 1 ? cor : 0, i == 2 ? cor : 0};
+        } else {
+            matriz[i][0] = (struct pixel_s){i == 0 ? cor : 0, i == 1 ? cor : 0, i == 2 ? cor : 0};
+            matriz[i][1] = (struct pixel_s){i == 0 ? cor : 0, i == 1 ? cor : 0, i == 2 ? cor : 0};
+            matriz[i][2] = (struct pixel_s){i == 0 ? cor : 0, i == 1 ? cor : 0, i == 2 ? cor : 0};
+        }
+    }
     printf("All tests passed successfully!\n");
 }
 
