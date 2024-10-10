@@ -1,6 +1,6 @@
 CC = gcc
 CFLAGS = -Wall
-OBJ_MAIN = main.o lib_ppm.o
+OBJ_MAIN = main.o lib_ppm.o test_gerar_subpixel.o
 OBJ_TEST = test_gerar_subpixel.o lib_ppm.o
 
 all: main test
