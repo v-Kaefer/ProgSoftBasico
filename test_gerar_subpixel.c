@@ -13,11 +13,6 @@ void test_gerar_subpixel() {
     assert(test_matriz[0][0].r == 0 && test_matriz[0][0].g == 0 && test_matriz[0][0].b == 0);
     assert(test_matriz[0][1].r == 0 && test_matriz[0][1].g == 100 && test_matriz[0][1].b == 0);
     // Add more assertions for other cases
-}
 
-
-int main() {
-    test_gerar_subpixel();
     printf("All tests passed successfully!\n");
-    return 0;
 }

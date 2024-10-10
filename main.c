@@ -72,6 +72,9 @@ int main() {
         return 1;
     }
 
+    test_gerar_subpixel();
+    return 0;
+
     // Realiza zoom de 3x
     zoom_imagem(&imagem_original, &imagem_ampliada);
 
