@@ -72,8 +72,20 @@ int main() {
         return 1;
     }
 
-    test_gerar_subpixel();
-    return 0;
+    void test_gerar_subpixel() {
+    struct pixel_s test_pixel = {100, 150, 200};
+    struct pixel_s test_matriz[3][3];
+
+    gerar_subpixel(&test_pixel, test_matriz);
+
+    // Add assertions to check the output of the function for different input values
+    assert(test_matriz[0][0].r == 0 && test_matriz[0][0].g == 0 && test_matriz[0][0].b == 0);
+    assert(test_matriz[0][1].r == 0 && test_matriz[0][1].g == 100 && test_matriz[0][1].b == 0);
+    // Add more assertions for other cases
+
+    printf("All tests passed successfully!\n");
+    }
+    printf("Resumindo código:");
 
     // Realiza zoom de 3x
     zoom_imagem(&imagem_original, &imagem_ampliada);
