@@ -65,7 +65,7 @@ void zoom_imagem(struct image_s *original, struct image_s *ampliada) {
 }
 
 
-void gerar_subpixel(struct pixel_s *pixel, struct pixel_s matriz[3][3]) {
+void test_gerar_subpixel(struct pixel_s *pixel, struct pixel_s matriz[3][3]) {
     int cores[3] = {pixel->r, pixel->g, pixel->b};
 
     for (int i = 0; i < 3; i++) {
