@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <assert.h>
 #include "lib_ppm.h"  // Incluindo a biblioteca fornecida
 
 // Função para gerar sub-pixels de acordo com a intensidade de cor
@@ -72,21 +73,6 @@ int main() {
         return 1;
     }
 
-    void test_gerar_subpixel() {
-    struct pixel_s test_pixel = {100, 150, 200};
-    struct pixel_s test_matriz[3][3];
-
-    gerar_subpixel(&test_pixel, test_matriz);
-
-    // Add assertions to check the output of the function for different input values
-    assert(test_matriz[0][0].r == 0 && test_matriz[0][0].g == 0 && test_matriz[0][0].b == 0);
-    assert(test_matriz[0][1].r == 0 && test_matriz[0][1].g == 100 && test_matriz[0][1].b == 0);
-    // Add more assertions for other cases
-
-    printf("All tests passed successfully!\n");
-    }
-    printf("Resumindo código:");
-
     // Realiza zoom de 3x
     zoom_imagem(&imagem_original, &imagem_ampliada);
 
@@ -94,7 +80,34 @@ int main() {
     if (write_ppm("lena_ampliada.ppm", &imagem_ampliada) != 0) {
         printf("Erro ao escrever a imagem ampliada.\n");
         return 1;
+    };
+
+
+    void test_gerar_subpixel() {
+        struct pixel_s test_pixel_black = {0, 0, 0};
+        struct pixel_s test_matriz_black[3][3];
+        gerar_subpixel(&test_pixel_black, test_matriz_black);
+
+        // Assert for black output
+        assert(test_matriz_black[0][0].r == 0 && test_matriz_black[0][0].g == 0 && test_matriz_black[0][0].b == 0);
+        assert(test_matriz_black[0][1].r == 0 && test_matriz_black[0][1].g == 0 && test_matriz_black[0][1].b == 0);
+        assert(test_matriz_black[0][2].r == 0 && test_matriz_black[0][2].g == 0 && test_matriz_black[0][2].b == 0);
+
+        struct pixel_s test_pixel_red = {150, 0, 0};
+        struct pixel_s test_matriz_red[3][3];
+        gerar_subpixel(&test_pixel_red, test_matriz_red);
+
+        // Assert for red output
+        assert(test_matriz_red[0][0].r == 0 && test_matriz_red[0][0].g == 0 && test_matriz_red[0][0].b == 0);
+        assert(test_matriz_red[0][1].r == 150 && test_matriz_red[0][1].g == 0 && test_matriz_red[0][1].b == 0);
+        assert(test_matriz_red[0][2].r == 0 && test_matriz_red[0][2].g == 0 && test_matriz_red[0][2].b == 0);
+
+        // Add similar assertions for blue and green outputs
+
+        printf("All tests passed successfully!\n");
     }
+    
+    printf("Resumindo código:");
 
     // Libera a memória alocada
     free_ppm(&imagem_original);
