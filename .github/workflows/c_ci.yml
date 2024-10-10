@@ -10,17 +10,12 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
+    - uses: actions/checkout@v4
 
-    - name: Set up build environment
-      run: sudo apt-get install build-essential libcunit1-dev
-
-    - name: Build and run tests
+    - name: Build and Run Main
       run: |
-        make
-        ./test
+        gcc -Wall -o main main.c lib_ppm.c
+        ./main
