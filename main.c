@@ -65,36 +65,46 @@ void zoom_imagem(struct image_s *original, struct image_s *ampliada) {
 }
 
 
-void test_gerar_subpixel(struct pixel_s *pixel, struct pixel_s matriz[3][3]) {
-    int cores[3] = {pixel->r, pixel->g, pixel->b};
+void test_gerar_subpixel(struct pixel_s *pixel, struct pixel_s expected[3][3]) {
+    struct pixel_s matriz[3][3];
+    gerar_subpixel(pixel, matriz);
 
     for (int i = 0; i < 3; i++) {
-        int cor = cores[i];
-        if (cor <= 74) {
-            matriz[i][0] = (struct pixel_s){0, 0, 0};
-            matriz[i][1] = (struct pixel_s){0, 0, 0};
-            matriz[i][2] = (struct pixel_s){0, 0, 0};
-        } else if (cor <= 134) {
-            matriz[i][0] = (struct pixel_s){0, 0, 0};
-            matriz[i][1] = (struct pixel_s){i == 0 ? cor : 0, i == 1 ? cor : 0, i == 2 ? cor : 0};
-            matriz[i][2] = (struct pixel_s){0, 0, 0};
-        } else if (cor <= 179) {
-            matriz[i][0] = (struct pixel_s){i == 0 ? cor : 0, i == 1 ? cor : 0, i == 2 ? cor : 0};
-            matriz[i][1] = (struct pixel_s){0, 0, 0};
-            matriz[i][2] = (struct pixel_s){i == 0 ? cor : 0, i == 1 ? cor : 0, i == 2 ? cor : 0};
-        } else {
-            matriz[i][0] = (struct pixel_s){i == 0 ? cor : 0, i == 1 ? cor : 0, i == 2 ? cor : 0};
-            matriz[i][1] = (struct pixel_s){i == 0 ? cor : 0, i == 1 ? cor : 0, i == 2 ? cor : 0};
-            matriz[i][2] = (struct pixel_s){i == 0 ? cor : 0, i == 1 ? cor : 0, i == 2 ? cor : 0};
+        for (int j = 0; j < 3; j++) {
+            assert(matriz[i][j].r == expected[i][j].r);
+            assert(matriz[i][j].g == expected[i][j].g);
+            assert(matriz[i][j].b == expected[i][j].b);
         }
     }
-    printf("All tests passed successfully!\n");
+    printf("Teste aprovado para os pixels (%d, %d, %d)\n", pixel->r, pixel->g, pixel->b);
 }
 
 int main() {
     struct image_s imagem_original, imagem_ampliada;
 
-    test_gerar_subpixel(&(struct pixel_s){0, 0, 0}, (struct pixel_s[3][3]){{{0, 0, 0}, {0, 0, 0}, {0, 0, 0}}});
+    // Test case 1: Black pixel
+    test_gerar_subpixel(&(struct pixel_s){0, 0, 0},
+     (struct pixel_s[3][3]){{{0, 0, 0}, {0, 0, 0}, {0, 0, 0}},
+                            {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}},
+                            {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}}});
+
+    // Test case 2: Pixel with intensity 100
+    test_gerar_subpixel(&(struct pixel_s){100, 100, 100},
+     (struct pixel_s[3][3]){{{0, 0, 0}, {100, 0, 0}, {0, 0, 0}},
+                            {{0, 0, 0}, {0, 100, 0}, {0, 0, 0}},
+                            {{0, 0, 0}, {0, 0, 100}, {0, 0, 0}}});
+
+    // Test case 3: Pixel with intensity 150
+    test_gerar_subpixel(&(struct pixel_s){150, 150, 150},
+     (struct pixel_s[3][3]){{{150, 0, 0}, {0, 0, 0}, {150, 0, 0}},
+                            {{0, 150, 0}, {0, 0, 0}, {0, 150, 0}},
+                            {{0, 0, 150}, {0, 0, 0}, {0, 0, 150}}});
+
+    // Test case 4: White pixel
+    test_gerar_subpixel(&(struct pixel_s){255, 255, 255},
+     (struct pixel_s[3][3]){{{255, 0, 0}, {255, 0, 0}, {255, 0, 0}},
+                            {{0, 255, 0}, {0, 255, 0}, {0, 255, 0}},
+                            {{0, 0, 255}, {0, 0, 255}, {0, 0, 255}}});
     printf("Resumindo código:");
 
     // Faz a leitura da imagem original e prossegue caso não haja erro
