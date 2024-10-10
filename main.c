@@ -64,8 +64,36 @@ void zoom_imagem(struct image_s *original, struct image_s *ampliada) {
     }
 }
 
+
+void test_gerar_subpixel() {
+    struct pixel_s test_pixel_black = {0, 0, 0};
+    struct pixel_s test_matriz_black[3][3];
+    gerar_subpixel(&test_pixel_black, test_matriz_black);
+
+    // Assert for black output
+    assert(test_matriz_black[0][0].r == 0 && test_matriz_black[0][0].g == 0 && test_matriz_black[0][0].b == 0);
+    assert(test_matriz_black[0][1].r == 0 && test_matriz_black[0][1].g == 0 && test_matriz_black[0][1].b == 0);
+    assert(test_matriz_black[0][2].r == 0 && test_matriz_black[0][2].g == 0 && test_matriz_black[0][2].b == 0);
+
+    struct pixel_s test_pixel_red = {150, 0, 0};
+    struct pixel_s test_matriz_red[3][3];
+    gerar_subpixel(&test_pixel_red, test_matriz_red);
+
+    // Assert for red output
+    assert(test_matriz_red[0][0].r == 0 && test_matriz_red[0][0].g == 0 && test_matriz_red[0][0].b == 0);
+    assert(test_matriz_red[0][1].r == 150 && test_matriz_red[0][1].g == 0 && test_matriz_red[0][1].b == 0);
+    assert(test_matriz_red[0][2].r == 0 && test_matriz_red[0][2].g == 0 && test_matriz_red[0][2].b == 0);
+
+    // Add similar assertions for blue and green outputs
+
+    printf("All tests passed successfully!\n");
+}
+
 int main() {
     struct image_s imagem_original, imagem_ampliada;
+
+    void test_gerar_subpixel();
+    printf("Resumindo código:");
 
     // Faz a leitura da imagem original e prossegue caso não haja erro
     if (read_ppm("lena.ppm", &imagem_original) != 0) {
@@ -82,32 +110,6 @@ int main() {
         return 1;
     };
 
-
-    void test_gerar_subpixel() {
-        struct pixel_s test_pixel_black = {0, 0, 0};
-        struct pixel_s test_matriz_black[3][3];
-        gerar_subpixel(&test_pixel_black, test_matriz_black);
-
-        // Assert for black output
-        assert(test_matriz_black[0][0].r == 0 && test_matriz_black[0][0].g == 0 && test_matriz_black[0][0].b == 0);
-        assert(test_matriz_black[0][1].r == 0 && test_matriz_black[0][1].g == 0 && test_matriz_black[0][1].b == 0);
-        assert(test_matriz_black[0][2].r == 0 && test_matriz_black[0][2].g == 0 && test_matriz_black[0][2].b == 0);
-
-        struct pixel_s test_pixel_red = {150, 0, 0};
-        struct pixel_s test_matriz_red[3][3];
-        gerar_subpixel(&test_pixel_red, test_matriz_red);
-
-        // Assert for red output
-        assert(test_matriz_red[0][0].r == 0 && test_matriz_red[0][0].g == 0 && test_matriz_red[0][0].b == 0);
-        assert(test_matriz_red[0][1].r == 150 && test_matriz_red[0][1].g == 0 && test_matriz_red[0][1].b == 0);
-        assert(test_matriz_red[0][2].r == 0 && test_matriz_red[0][2].g == 0 && test_matriz_red[0][2].b == 0);
-
-        // Add similar assertions for blue and green outputs
-
-        printf("All tests passed successfully!\n");
-    }
-    
-    printf("Resumindo código:");
 
     // Libera a memória alocada
     free_ppm(&imagem_original);
