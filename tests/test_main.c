@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h> // Include necessary header for malloc
-#include "CUnit/Basic.h"
+#include <CUnit/CUnit.h>
+#include <CUnit/Basic.h>
+#include "lib_ppm.h"
 
 // Define struct pixel_s and struct image_s if not already defined
 struct pixel_s {

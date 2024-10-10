@@ -18,3 +18,5 @@ int read_ppm(char *file, struct image_s *image);
 int write_ppm(char *file, struct image_s *image);
 int new_ppm(struct image_s *image, int width, int height);
 int free_ppm(struct image_s *image);
+void gerar_subpixel(struct pixel_s *pixel, struct pixel_s matriz[3][3]);
+void zoom_image(struct image_s *orig, struct image_s *ampliada);
