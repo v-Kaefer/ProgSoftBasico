@@ -92,7 +92,7 @@ void test_gerar_subpixel() {
 int main() {
     struct image_s imagem_original, imagem_ampliada;
 
-    void test_gerar_subpixel();
+    test_gerar_subpixel();
     printf("Resumindo código:");
 
     // Faz a leitura da imagem original e prossegue caso não haja erro
