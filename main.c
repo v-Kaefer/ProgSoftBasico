@@ -94,7 +94,7 @@ void test_gerar_subpixel(struct pixel_s *pixel, struct pixel_s matriz[3][3]) {
 int main() {
     struct image_s imagem_original, imagem_ampliada;
 
-    test_gerar_subpixel();
+    test_gerar_subpixel(&(struct pixel_s){0, 0, 0}, (struct pixel_s[3][3]){{{0, 0, 0}, {0, 0, 0}, {0, 0, 0}}});
     printf("Resumindo código:");
 
     // Faz a leitura da imagem original e prossegue caso não haja erro
