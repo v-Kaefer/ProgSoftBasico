@@ -1,124 +1,130 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <assert.h>
 #include "lib_ppm.h"  // Incluindo a biblioteca fornecida
 
 // Função para gerar sub-pixels de acordo com a intensidade de cor
 void gerar_subpixel(struct pixel_s *pixel, struct pixel_s matriz[3][3]) {
-    int r = pixel->r;
-    int g = pixel->g;
-    int b = pixel->b;
+    int cores[3] = {pixel->r, pixel->g, pixel->b};
 
-    // Definindo o padrão de sub-pixels para o componente vermelho (R)
-    if (r <= 74) {
-        matriz[0][0] = (struct pixel_s){0, 0, 0};  // Tudo preto
-        matriz[0][1] = (struct pixel_s){0, 0, 0};
-        matriz[0][2] = (struct pixel_s){0, 0, 0};
-    } else if (r <= 134) {
-        matriz[0][0] = (struct pixel_s){0, 0, 0};  // Apenas o sub-pixel do meio é vermelho
-        matriz[0][1] = (struct pixel_s){r, 0, 0};
-        matriz[0][2] = (struct pixel_s){0, 0, 0};
-    } else if (r <= 179) {
-        matriz[0][0] = (struct pixel_s){r, 0, 0};  // Os sub-pixels laterais são vermelhos
-        matriz[0][1] = (struct pixel_s){0, 0, 0};
-        matriz[0][2] = (struct pixel_s){r, 0, 0};
-    } else {
-        matriz[0][0] = (struct pixel_s){r, 0, 0};  // Todos os sub-pixels são vermelhos
-        matriz[0][1] = (struct pixel_s){r, 0, 0};
-        matriz[0][2] = (struct pixel_s){r, 0, 0};
-    }
-
-    // Componente verde
-    if (g <= 74) {
-        matriz[1][0] = (struct pixel_s){0, 0, 0};  // Tudo preto
-        matriz[1][1] = (struct pixel_s){0, 0, 0};
-        matriz[1][2] = (struct pixel_s){0, 0, 0};
-    } else if (g <= 134) {
-        matriz[1][0] = (struct pixel_s){0, 0, 0};  // Apenas o sub-pixel do meio é verde
-        matriz[1][1] = (struct pixel_s){0, g, 0};
-        matriz[1][2] = (struct pixel_s){0, 0, 0};
-    } else if (g <= 179) {
-        matriz[1][0] = (struct pixel_s){0, g, 0};  // Sub-pixels laterais são verdes
-        matriz[1][1] = (struct pixel_s){0, 0, 0};
-        matriz[1][2] = (struct pixel_s){0, g, 0};
-    } else {
-        matriz[1][0] = (struct pixel_s){0, g, 0};  // Todos os sub-pixels são verdes
-        matriz[1][1] = (struct pixel_s){0, g, 0};
-        matriz[1][2] = (struct pixel_s){0, g, 0};
-    }
-
-    // Componente azul
-    if (b <= 74) {
-        matriz[2][0] = (struct pixel_s){0, 0, 0};  // Tudo preto
-        matriz[2][1] = (struct pixel_s){0, 0, 0};
-        matriz[2][2] = (struct pixel_s){0, 0, 0};
-    } else if (b <= 134) {
-        matriz[2][0] = (struct pixel_s){0, 0, 0};  // Apenas o sub-pixel do meio é azul
-        matriz[2][1] = (struct pixel_s){0, 0, b};
-        matriz[2][2] = (struct pixel_s){0, 0, 0};
-    } else if (b <= 179) {
-        matriz[2][0] = (struct pixel_s){0, 0, b};  // Sub-pixels laterais são azuis
-        matriz[2][1] = (struct pixel_s){0, 0, 0};
-        matriz[2][2] = (struct pixel_s){0, 0, b};
-    } else {
-        matriz[2][0] = (struct pixel_s){0, 0, b};  // Todos os sub-pixels são azuis
-        matriz[2][1] = (struct pixel_s){0, 0, b};
-        matriz[2][2] = (struct pixel_s){0, 0, b};
+    // Definindo o padrão de sub-pixels para cada intensidade de cor
+    // Aumento de complexidade, mas otimização de código [Reps -> loops]
+    for (int i = 0; i < 3; i++) {
+        int cor = cores[i];
+        if (cor <= 74) { // Tudo preto
+            matriz[i][0] = (struct pixel_s){0, 0, 0};
+            matriz[i][1] = (struct pixel_s){0, 0, 0};
+            matriz[i][2] = (struct pixel_s){0, 0, 0};
+        } else if (cor <= 134) { // Apenas o sub-pixel do meio é colorido
+            matriz[i][0] = (struct pixel_s){0, 0, 0};
+            matriz[i][1] = (struct pixel_s){i == 0 ? cor : 0, i == 1 ? cor : 0, i == 2 ? cor : 0};
+            matriz[i][2] = (struct pixel_s){0, 0, 0};
+        } else if (cor <= 179) { // Sub-pixels laterais são coloridos
+            matriz[i][0] = (struct pixel_s){i == 0 ? cor : 0, i == 1 ? cor : 0, i == 2 ? cor : 0};
+            matriz[i][1] = (struct pixel_s){0, 0, 0};
+            matriz[i][2] = (struct pixel_s){i == 0 ? cor : 0, i == 1 ? cor : 0, i == 2 ? cor : 0};
+        } else { // Todos os sub-pixels são coloridos
+            matriz[i][0] = (struct pixel_s){i == 0 ? cor : 0, i == 1 ? cor : 0, i == 2 ? cor : 0};
+            matriz[i][1] = (struct pixel_s){i == 0 ? cor : 0, i == 1 ? cor : 0, i == 2 ? cor : 0};
+            matriz[i][2] = (struct pixel_s){i == 0 ? cor : 0, i == 1 ? cor : 0, i == 2 ? cor : 0};
+        }
     }
 }
 
 // Função principal para realizar o zoom de 3x
-void zoom_image(struct image_s *orig, struct image_s *ampliada) {
+void zoom_imagem(struct image_s *original, struct image_s *ampliada) {
     // Corrigindo as dimensões ampliadas
-    ampliada->width = orig->width * 3;
-    ampliada->height = orig->height * 3;
+    ampliada->width = original->width * 3;
+    ampliada->height = original->height * 3;
+    
+    // Alocando memória para a imagem ampliada
     ampliada->pix = (struct pixel_s *)malloc(ampliada->width * ampliada->height * sizeof(struct pixel_s));
-
     if (!ampliada->pix) {
         printf("Erro ao alocar memória para a imagem ampliada.\n");
         exit(1);
     }
 
     // Percorrendo cada pixel da imagem original e mapeando sub-pixels
-    for (int y = 0; y < orig->height; y++) {
-        for (int x = 0; x < orig->width; x++) {
+    for (int y = 0; y < original->height; y++) {
+        for (int x = 0; x < original->width; x++) {
             struct pixel_s matriz[3][3];
-            gerar_subpixel(&orig->pix[y * orig->width + x], matriz);
+            gerar_subpixel(&original->pix[y * original->width + x], matriz);
 
             // Copiando sub-pixels gerados para a imagem ampliada
-            for (int i = 0; i < 3; i++) {
-                for (int j = 0; j < 3; j++) {
+            for (int i = 0; i < 3; i++) { // i -> linhas
+                for (int j = 0; j < 3; j++) { // j -> colunas
                     // Definindo as novas coordenadas da imagem ampliada (3x maior)
                     int new_y = y * 3 + i;
                     int new_x = x * 3 + j;
-
-                    ampliada->pix[new_y * ampliada->width + new_x] = matriz[i][j];
+                    // Alocação dos novos blocos de pixels na imagem
+                    ampliada->pix [new_y * ampliada->width + new_x] = matriz[i][j];
                 }
             }
         }
     }
 }
 
+
+void test_gerar_subpixel(struct pixel_s *pixel, struct pixel_s expected[3][3]) {
+    struct pixel_s matriz[3][3];
+    gerar_subpixel(pixel, matriz);
+
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 3; j++) {
+            assert(matriz[i][j].r == expected[i][j].r);
+            assert(matriz[i][j].g == expected[i][j].g);
+            assert(matriz[i][j].b == expected[i][j].b);
+        }
+    }
+    printf("Teste aprovado para os pixels (%d, %d, %d)\n", pixel->r, pixel->g, pixel->b);
+}
+
 int main() {
     struct image_s imagem_original, imagem_ampliada;
 
-    // Leitura da imagem original
+    // Test case 1: Black pixel
+    test_gerar_subpixel(&(struct pixel_s){0, 0, 0},
+     (struct pixel_s[3][3]){{{0, 0, 0}, {0, 0, 0}, {0, 0, 0}},
+                            {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}},
+                            {{0, 0, 0}, {0, 0, 0}, {0, 0, 0}}});
+
+    // Test case 2: Pixel with intensity 100
+    test_gerar_subpixel(&(struct pixel_s){100, 100, 100},
+     (struct pixel_s[3][3]){{{0, 0, 0}, {100, 0, 0}, {0, 0, 0}},
+                            {{0, 0, 0}, {0, 100, 0}, {0, 0, 0}},
+                            {{0, 0, 0}, {0, 0, 100}, {0, 0, 0}}});
+
+    // Test case 3: Pixel with intensity 150
+    test_gerar_subpixel(&(struct pixel_s){150, 150, 150},
+     (struct pixel_s[3][3]){{{150, 0, 0}, {0, 0, 0}, {150, 0, 0}},
+                            {{0, 150, 0}, {0, 0, 0}, {0, 150, 0}},
+                            {{0, 0, 150}, {0, 0, 0}, {0, 0, 150}}});
+
+    // Test case 4: White pixel
+    test_gerar_subpixel(&(struct pixel_s){255, 255, 255},
+     (struct pixel_s[3][3]){{{255, 0, 0}, {255, 0, 0}, {255, 0, 0}},
+                            {{0, 255, 0}, {0, 255, 0}, {0, 255, 0}},
+                            {{0, 0, 255}, {0, 0, 255}, {0, 0, 255}}});
+    printf("Resumindo código:");
+
+    // Faz a leitura da imagem original e prossegue caso não haja erro
     if (read_ppm("lena.ppm", &imagem_original) != 0) {
         printf("Erro ao ler a imagem original.\n");
         return 1;
     }
 
-    // Realizar zoom de 3x
-    zoom_image(&imagem_original, &imagem_ampliada);
+    // Realiza zoom de 3x
+    zoom_imagem(&imagem_original, &imagem_ampliada);
 
-    // Escrever a imagem ampliada
+    // Escreve a imagem ampliada, caso não haja erro
     if (write_ppm("lena_ampliada.ppm", &imagem_ampliada) != 0) {
         printf("Erro ao escrever a imagem ampliada.\n");
         return 1;
-    }
+    };
 
-    // Liberar a memória alocada
+
+    // Libera a memória alocada
     free_ppm(&imagem_original);
     free_ppm(&imagem_ampliada);
-
     return 0;
 }

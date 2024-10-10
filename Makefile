@@ -1,11 +1,17 @@
 CC = gcc
-CFLAGS = -Wall -I.
-LIBS = -lcunit
+CFLAGS = -Wall
+OBJ_MAIN = main.o lib_ppm.o
 
-all: test
+all: main
 
-test: tests/test_main.c lib_ppm.c
-	$(CC) $(CFLAGS) -o test tests/test_main.c lib_ppm.c $(LIBS)
+main: $(OBJ_MAIN)
+	$(CC) $(CFLAGS) -o main $(OBJ_MAIN)
+
+main.o: main.c lib_ppm.h
+	$(CC) $(CFLAGS) -c main.c
+
+lib_ppm.o: lib_ppm.c lib_ppm.h
+	$(CC) $(CFLAGS) -c lib_ppm.c
 
 clean:
-	rm -f test
+	rm -f main *.o
