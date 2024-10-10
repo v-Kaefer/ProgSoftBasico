@@ -1,0 +1,26 @@
+name: C CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up build environment
+      run: sudo apt-get install build-essential libcunit1-dev
+
+    - name: Build and run tests
+      run: |
+        make
+        ./test
